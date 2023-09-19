@@ -5,6 +5,7 @@ import (
 	"auto-mooc/webkit"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/playwright-community/playwright-go"
@@ -36,6 +37,7 @@ func (ms MoocService) Login(ctx *gin.Context) {
 		}
 	})
 	<-ch
+	time.Sleep(1 * time.Second)
 	session.Page.Close()
 	session.Context.Close()
 	session.Browser.Close()

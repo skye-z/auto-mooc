@@ -2,7 +2,9 @@ package webkit
 
 import (
 	"auto-mooc/global"
+	"io"
 	"log"
+	"os"
 
 	"github.com/playwright-community/playwright-go"
 )
@@ -43,8 +45,24 @@ func InitWebKit() *WebKit {
 	}
 	// 输出启动脚步位置
 	log.Printf("[WebKit] Launches from: %s", pw.WebKit.ExecutablePath())
+	// 创建持久化文件
+	CreateStorage()
 	return &WebKit{
 		Engine:  pw,
 		Running: false,
 	}
+}
+
+func CreateStorage() {
+	path := global.GetString("basic.workspace") + "/storage.db"
+	file, err := os.Create(path)
+	if err != nil {
+		log.Fatalf("[WebKit] Create storage errir: %v", err)
+	}
+	data := "{\"cookies\":[],\"origins\":[]}"
+	_, err = io.Writer.Write(file, []byte(data))
+	if err != nil {
+		log.Fatalf("[WebKit] Write storage errir: %v", err)
+	}
+	log.Printf("[WebKit] Create storage from: %s", path)
 }

@@ -33,7 +33,6 @@ func OpenPage(engine *playwright.Playwright, url string) (*Session, error) {
 	if err != nil {
 		return nil, err
 	}
-	page.Context().AddCookies([]playwright.OptionalCookie{})
 	if _, err = page.Goto(url); err != nil {
 		return nil, err
 	}
