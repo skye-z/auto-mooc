@@ -17,10 +17,14 @@ func (ss StatusService) GetStatus(ctx *gin.Context) {
 	if !isLogin {
 		loginTips = "未登录"
 	}
+	classId := global.GetString("mooc.class")
+	if len(classId) != 0 {
+		loginTips += ", 已选课(" + classId + ")"
+	}
 	if ss.WebKitObj.Running {
-		global.ReturnMessage(ctx, true, loginTips+",服务运行中")
+		global.ReturnMessage(ctx, true, loginTips+", 任务执行中")
 	} else {
-		global.ReturnMessage(ctx, true, loginTips+",服务尚未启动")
+		global.ReturnMessage(ctx, true, loginTips+", 任务未启动")
 	}
 }
 

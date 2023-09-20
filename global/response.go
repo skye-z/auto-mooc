@@ -7,7 +7,7 @@ import (
 )
 
 type commonResponse struct {
-	State   bool   `json:"bool"`
+	State   bool   `json:"state"`
 	Message string `json:"message"`
 	Data    any    `json:"data"`
 	Time    int64  `json:"time"`

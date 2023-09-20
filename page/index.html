@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Auto Mooc - 自动化慕课工具</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body style="background-color: #f4f4f4;">
+  <div style="max-width: 500px;margin: 10px auto">
+    <h1 class="text-center text-sm mb-2">Auto Mooc</h1>
+    <div class="card mb-3">
+      <div class="card-body">
+        <button type="button" class="btn btn-secondary btn-sm float-end" onclick="getStatus">刷新</button>
+        <h5 class="card-title">运行状态</h5>
+        <h6 class="card-subtitle mt-2 text-body-secondary" id="status">获取中...</h6>
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">
+          <span class="me-2 text-black-50">Step 1</span>
+          <span>登录账户</span>
+        </h5>
+        <h6 class="card-subtitle mb-2 text-sm text-body-secondary">点击下方按钮将打开新的页面进行扫码登录, 扫码完成后可点击顶部运行状态卡片的刷新按钮, 查看登录状态</h6>
+        <a class="btn btn-primary" href="/login" target="_blank">使用微信扫码登录</a>
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-body">
+        <button type="button" class="btn btn-sm btn-primary float-end" onclick="getClassList()">获取课程列表</button>
+        <h5 class="card-title">
+          <span class="me-2 text-black-50">Step 2</span>
+          <span>选取课程</span>
+        </h5>
+        <div id="class-list"></div>
+        <h6 class="card-subtitle mt-2 text-sm text-body-secondary">选课先点击右侧按钮, 等待列表加载出来后选择所需课程</h6>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">
+          <span class="me-2 text-black-50">Step 3</span>
+          <span>任务控制</span>
+        </h5>
+        <div id="work-tips" class="mb-2"></div>
+        <button type="button" class="btn btn-sm btn-primary" onclick="classStart()">开始上课</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="classStop()">停止上课</button>
+        <a class="btn btn-sm btn-primary" href="/screenshot" target="_blank">任务截图</a>
+      </div>
+    </div>
+    <div class="text-center text-sm text-black-50 mt-2">简易控制页面, 点击没有动画反馈, 操作完成前请勿频繁点击</div>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+  (function () {
+    getStatus();
+  })()
+
+  function getStatus() {
+    $.get("/status", function (res) {
+      if (res.state) {
+        $("#status").text(res.message)
+      } else {
+        $("#status").text("获取运行状态失败")
+      }
+    })
+  }
+
+  function getClassList() {
+    $.get("/class/list", function (res) {
+      if (res.state) {
+        let code = ""
+        for (let i in res.data) {
+          code += `<div class="mt-2">
+            <div>${res.data[i].Name}</div>
+            <div class="text-sm text-black-50">${res.data[i].Id}</div>
+            <button type="button" class="btn btn-sm btn-primary" onclick="selectClass(${res.data[i].Id},'${res.data[i].Name}')">选择</button>
+            </div>`
+        }
+        $("#class-list").html(code)
+      } else {
+        $("#class-list").text("获取课程列表失败")
+      }
+    })
+  }
+
+  function selectClass(id, name) {
+    $("#class-list").html("提交中...")
+    $.get("/class/select?id=" + id, function (res) {
+      if (res.state) {
+        $("#class-list").text("已选择: " + name)
+        getStatus();
+      } else {
+        $("#class-list").text("选择课程失败")
+      }
+    })
+  }
+
+function classStart() {
+  $.get("/class/start", function (res) {
+    if (res.state) {
+      $("#work-tips").text("执行成功, 开始上课")
+      getStatus();
+    } else {
+      $("#work-tips").text(res.message)
+    }
+  })
+}
+
+function classStop() {
+  $.get("/class/stop", function (res) {
+    if (res.state) {
+      $("#work-tips").text("执行成功, 停止上课")
+      getStatus();
+    } else {
+      $("#work-tips").text(res.message)
+    }
+  })
+}
+</script>
+
+</html>

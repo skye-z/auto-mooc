@@ -4,12 +4,17 @@ import (
 	"auto-mooc/global"
 	"auto-mooc/service"
 	"auto-mooc/webkit"
+	"embed"
 	"io"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
 )
+
+//go:embed page/*
+var page embed.FS
 
 func main() {
 	// 初始化配置
@@ -31,6 +36,17 @@ func RunHttp(obj *webkit.WebKit) {
 	log.Println("[Http] Route registration")
 	// 创建路由
 	route := gin.Default()
+	// 配置静态页面
+	route.NoRoute(func(ctx *gin.Context) {
+		data, err := page.ReadFile("page/index.html")
+		if err != nil {
+			ctx.HTML(http.StatusOK, "404.html", gin.H{
+				"title": "404",
+			})
+			return
+		}
+		ctx.Data(http.StatusOK, "text/html; charset=utf-8", data)
+	})
 	// 创建状态服务
 	statusService := &service.StatusService{
 		WebKitObj: obj,
