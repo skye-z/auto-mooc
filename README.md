@@ -40,8 +40,9 @@
 双击下载的二进制文件即可运行, 如果是拉取项目代码的, 请在项目目录下执行`go run main.go`
 
 1. 首先访问`/login`登录账户
-2. 登录后访问`/class/select`进行选课
-3. 选完后访问`/class/start`开始上课
+2. 登录后访问`/class/list`获取课程列表
+3. 然后访问`/class/select?id=课程id`进行选课
+4. 选完后访问`/class/start`开始上课
 
 其他接口
 

@@ -54,7 +54,7 @@ func (ms MoocService) Login(ctx *gin.Context) {
 
 // 检查登录
 func (ms MoocService) checkLogin(ctx *gin.Context, host string, page playwright.Page) bool {
-	if ms.getLoginStatus(page) {
+	if !ms.getLoginStatus(page) {
 		global.Set("mooc.login", "false")
 		if _, err := page.Goto(host + "/oauth/login/weixin"); err != nil {
 			log.Fatalf("无法跳转地址: %v", err)

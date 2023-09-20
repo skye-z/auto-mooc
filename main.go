@@ -4,7 +4,7 @@ import (
 	"auto-mooc/global"
 	"auto-mooc/service"
 	"auto-mooc/webkit"
-	"io/ioutil"
+	"io"
 	"log"
 	"os"
 
@@ -25,7 +25,9 @@ func RunHttp(obj *webkit.WebKit) {
 	// 关闭调试
 	gin.SetMode(gin.ReleaseMode)
 	// 禁用路由日志
-	gin.DefaultWriter = ioutil.Discard
+	if !global.GetBool("basic.debug") {
+		gin.DefaultWriter = io.Discard
+	}
 	log.Println("[Http] Route registration")
 	// 创建路由
 	route := gin.Default()

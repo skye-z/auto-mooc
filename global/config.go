@@ -45,6 +45,8 @@ func createDefault() {
 	viper.SetDefault("basic.workspace", dir)
 	// 服务端口
 	viper.SetDefault("basic.port", "80")
+	// 调试模式
+	viper.SetDefault("basic.debug", "false")
 	// 慕课服务地址
 	viper.SetDefault("mooc.path", "http://cce.org.uooconline.com")
 	// 持久化存储位置
