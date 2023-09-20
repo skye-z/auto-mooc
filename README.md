@@ -43,6 +43,26 @@
 2. 登录后访问`/class/select`进行选课
 2. 选完后访问`/class/start`开始上课
 
+### 配置文件
+
+在应用程序首次运行后, 应用会在所在目录下生成`config.ini`配置文件, 如果不了解配置含义请勿随意修改!!!!
+
+```ini
+[basic]
+; 是否已安装, 用于标定初始化状态
+install=true
+; 应用监听端口, 将在此端口上提供Http服务
+port=80
+; 应用工作空间, 应用所有资源所在的目录
+workspace=/Users/zhaoguiyang/Desktop/Workspace/Golang/auto-mooc
+
+[mooc]
+; 慕课服务地址, 请已登录后跳转的域名地址为准
+path=http://cce.org.uooconline.com
+; 持久化存储位置, 提供Cookie和本地存储的持久化
+storage=/Users/zhaoguiyang/Desktop/Workspace/Golang/auto-mooc/storage.db
+```
+
 ## 编译
 
 这里提供两种编译方法.

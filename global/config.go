@@ -39,7 +39,6 @@ func GetString(key string) string {
 
 func createDefault() {
 	dir, _ := os.Getwd()
-
 	// 安装状态
 	viper.SetDefault("basic.install", "false")
 	// 应用目录
