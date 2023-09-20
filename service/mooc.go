@@ -139,23 +139,21 @@ func (ms MoocService) StartClass(ctx *gin.Context) {
 	if err != nil {
 		log.Fatalf("无法打开页面: %v", err)
 	}
-	state := webkit.CreateWork(session)
+	state := webkit.CreateWork(session, ms.WebKitObj)
 	if !state {
 		global.ReturnMessage(ctx, false, "正在上课中")
 		return
 	}
-	ms.WebKitObj.Running = true
 	global.ReturnMessage(ctx, true, "上课开始")
 }
 
 // 结束上课
 func (ms MoocService) StopClass(ctx *gin.Context) {
-	state := webkit.CloseWork()
+	state := webkit.CloseWork(ms.WebKitObj)
 	if !state {
 		global.ReturnMessage(ctx, false, "未在上课中")
 		return
 	}
-	ms.WebKitObj.Running = false
 	global.ReturnMessage(ctx, true, "上课结束")
 }
 

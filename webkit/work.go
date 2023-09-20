@@ -25,7 +25,7 @@ var (
 )
 
 // 创建任务
-func CreateWork(session *Session) bool {
+func CreateWork(session *Session, status *WebKit) bool {
 	// 加锁防并发
 	workLock.Lock()
 	defer workLock.Unlock()
@@ -33,6 +33,8 @@ func CreateWork(session *Session) bool {
 	if workStatus == "started" {
 		return false
 	}
+	status.Running = true
+	status.Error = ""
 	// 存储任务会话
 	workSession = session
 	// 创建退出信号
@@ -40,7 +42,11 @@ func CreateWork(session *Session) bool {
 
 	_, err := session.Page.Evaluate(string(script))
 	if err != nil {
-		log.Printf("error: %v", err)
+		log.Printf("[Work] Init script error: %v", err)
+	}
+	_, err = session.Page.Evaluate(string("selectClass()"))
+	if err != nil {
+		log.Printf("[Work] Run script error: %v", err)
 	}
 
 	// 启动协程
@@ -52,8 +58,8 @@ func CreateWork(session *Session) bool {
 				return
 			default:
 				// 每3秒检测1次
-				time.Sleep(5 * time.Second)
-				WorkContent(session)
+				time.Sleep(10 * time.Second)
+				WorkContent(session, status)
 			}
 		}
 	}()
@@ -63,7 +69,7 @@ func CreateWork(session *Session) bool {
 }
 
 // 关闭任务
-func CloseWork() bool {
+func CloseWork(status *WebKit) bool {
 	// 加锁防并发
 	workLock.Lock()
 	defer workLock.Unlock()
@@ -76,6 +82,7 @@ func CloseWork() bool {
 	workQuit <- true
 	// 更新状态
 	workStatus = "stopped"
+	status.Running = false
 	// 等待1秒,随后关闭浏览器
 	time.Sleep(1 * time.Second)
 	workSession.Page.Close()
@@ -85,14 +92,15 @@ func CloseWork() bool {
 }
 
 // 任务内容
-func WorkContent(session *Session) {
+func WorkContent(session *Session, status *WebKit) {
 	page := session.Page
 	// 查找是否存在视频播放器
 	visible, _ := page.Locator("#player").IsVisible()
 	if !visible {
 		// 错误超过3次, 结束任务
 		if workErrorNumber == 3 {
-			CloseWork()
+			status.Error = "未检测到播放器,请检查是否需要答题"
+			CloseWork(status)
 			return
 		}
 		log.Println("[Work] Found anomaly")

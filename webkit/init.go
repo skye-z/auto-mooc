@@ -19,6 +19,7 @@ var RunOptions = &playwright.RunOptions{
 type WebKit struct {
 	Engine  *playwright.Playwright
 	Running bool
+	Error   string
 }
 
 func InitWebKit() *WebKit {
