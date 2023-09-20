@@ -48,6 +48,7 @@ func (ms MoocService) Login(ctx *gin.Context) {
 	<-ch
 	session.Page.Context().StorageState(global.GetString("mooc.storage"))
 	log.Println("[Mooc] Login successful")
+	global.SendPush("登录成功, 请选择课程.")
 	global.Set("mooc.login", "true")
 	ms.Close(session)
 }
@@ -145,6 +146,7 @@ func (ms MoocService) StartClass(ctx *gin.Context) {
 		return
 	}
 	global.ReturnMessage(ctx, true, "上课开始")
+	global.SendPush("上课开始.")
 }
 
 // 结束上课
@@ -155,6 +157,7 @@ func (ms MoocService) StopClass(ctx *gin.Context) {
 		return
 	}
 	global.ReturnMessage(ctx, true, "上课结束")
+	global.SendPush("上课结束.")
 }
 
 // 获取登录状态

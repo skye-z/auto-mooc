@@ -1,6 +1,7 @@
 package webkit
 
 import (
+	"auto-mooc/global"
 	_ "embed"
 	"log"
 	"sync"
@@ -101,6 +102,7 @@ func WorkContent(session *Session, status *WebKit) {
 		// 错误超过3次, 结束任务
 		if workErrorNumber == 3 {
 			status.Error = "未检测到播放器,请检查是否需要答题"
+			global.SendPush("未检测到播放器, 播放已停止, 请检查是否需要答题或课程以播放完毕.")
 			CloseWork(status)
 			return
 		}

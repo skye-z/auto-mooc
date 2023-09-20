@@ -55,5 +55,9 @@ func createDefault() {
 	viper.SetDefault("mooc.storage", dir+"/storage.db")
 	// 是否已登录
 	viper.SetDefault("mooc.login", "false")
+	// 是否开启推送
+	viper.SetDefault("push.enable", "false")
+	// 推送地址
+	viper.SetDefault("push.url", "https://api2.pushdeer.com/message/push?pushkey={替换你自己的令牌}&text=")
 	viper.SafeWriteConfig()
 }
