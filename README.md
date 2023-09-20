@@ -1,6 +1,6 @@
 # Auto Mooc - 自动化慕课工具
 
-[![](https://img.shields.io/badge/Go-1.20+-%2300ADD8?style=flat&logo=go)](go.work)
+[![](https://img.shields.io/badge/Go-1.21+-%2300ADD8?style=flat&logo=go)](go.work)
 [![](https://img.shields.io/badge/License-GPL%20v3.0-orange)](LICENSE)
 
 请注意: 本项目仅供交流学习自动化测试技术, 滥用造成的后果请自行承担!
