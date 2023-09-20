@@ -24,8 +24,6 @@ func OpenPage(engine *playwright.Playwright, url string) (*Session, error) {
 	context, err := browser.NewContext(playwright.BrowserNewContextOptions{
 		StorageStatePath: playwright.String(storagePath),
 	})
-	// 配置持久化存储
-	context.StorageState(storagePath)
 	if err != nil {
 		return nil, err
 	}

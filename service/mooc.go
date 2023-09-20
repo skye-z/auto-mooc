@@ -23,6 +23,7 @@ func (ms MoocService) Login(ctx *gin.Context) {
 	if err != nil {
 		log.Fatalf("无法打开页面: %v", err)
 	}
+	session.Page.Context().StorageState(global.GetString("mooc.storage"))
 	// 检查登录
 	next := ms.checkLogin(ctx, host, session.Page)
 	if !next {
@@ -37,6 +38,7 @@ func (ms MoocService) Login(ctx *gin.Context) {
 		}
 	})
 	<-ch
+	session.Page.Context().StorageState(global.GetString("mooc.storage"))
 	time.Sleep(1 * time.Second)
 	session.Page.Close()
 	session.Context.Close()
