@@ -4,6 +4,7 @@ import (
 	"auto-mooc/global"
 	"auto-mooc/service"
 	"auto-mooc/webkit"
+	"io/ioutil"
 	"log"
 	"os"
 
@@ -23,10 +24,11 @@ func main() {
 func RunHttp(obj *webkit.WebKit) {
 	// 关闭调试
 	gin.SetMode(gin.ReleaseMode)
+	// 禁用路由日志
+	gin.DefaultWriter = ioutil.Discard
 	log.Println("[Http] Route registration")
 	// 创建路由
 	route := gin.Default()
-
 	// 创建状态服务
 	statusService := &service.StatusService{
 		WebKitObj: obj,
@@ -35,9 +37,10 @@ func RunHttp(obj *webkit.WebKit) {
 	moocService := &service.MoocService{
 		WebKitObj: obj,
 	}
-
 	// 接口 查询状态
 	route.GET("/status", statusService.GetStatus)
+	// 接口 获取任务截图
+	route.GET("/screenshot", statusService.GetScreenshot)
 	// 接口 登录账户
 	route.GET("/login", moocService.Login)
 	// 接口 课程列表
