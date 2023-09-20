@@ -33,6 +33,7 @@ func CreateWork(session *Session, status *WebKit) bool {
 	if workStatus == "started" {
 		return false
 	}
+	log.Println("[Work] Start execution")
 	status.Running = true
 	status.Error = ""
 	// 存储任务会话
