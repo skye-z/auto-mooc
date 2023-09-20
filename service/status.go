@@ -23,3 +23,16 @@ func (ss StatusService) GetStatus(ctx *gin.Context) {
 		global.ReturnMessage(ctx, true, loginTips+",服务尚未启动")
 	}
 }
+
+func (ss StatusService) GetScreenshot(ctx *gin.Context) {
+	if !ss.WebKitObj.Running {
+		global.ReturnMessage(ctx, false, "服务尚未启动")
+		return
+	}
+	data, err := webkit.WorkScreenshot()
+	if err != nil {
+		global.ReturnMessage(ctx, false, "获取任务截图失败")
+	}
+	ctx.Writer.Write(data)
+	ctx.Abort()
+}

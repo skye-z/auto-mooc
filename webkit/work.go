@@ -116,3 +116,16 @@ func WorkContent(session *Session, status *WebKit) {
 		workErrorNumber = 0
 	}
 }
+
+// 任务截图
+func WorkScreenshot() ([]byte, error) {
+	// 加锁防并发
+	workLock.Lock()
+	defer workLock.Unlock()
+	// 检查任务是否已停止
+	if workStatus == "stopped" {
+		return nil, nil
+	}
+	log.Println("[Work] Capture work images...")
+	return workSession.Page.Screenshot()
+}
