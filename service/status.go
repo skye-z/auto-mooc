@@ -12,9 +12,14 @@ type StatusService struct {
 }
 
 func (ss StatusService) GetStatus(ctx *gin.Context) {
+	isLogin := global.GetBool("mooc.login")
+	loginTips := "已登录"
+	if !isLogin {
+		loginTips = "未登录"
+	}
 	if ss.WebKitObj.Running {
-		global.ReturnMessage(ctx, true, "服务运行中")
+		global.ReturnMessage(ctx, true, loginTips+",服务运行中")
 	} else {
-		global.ReturnMessage(ctx, true, "服务尚未启动")
+		global.ReturnMessage(ctx, true, loginTips+",服务尚未启动")
 	}
 }

@@ -49,5 +49,7 @@ func createDefault() {
 	viper.SetDefault("mooc.path", "http://cce.org.uooconline.com")
 	// 持久化存储位置
 	viper.SetDefault("mooc.storage", dir+"/storage.db")
+	// 是否已登录
+	viper.SetDefault("mooc.login", "false")
 	viper.SafeWriteConfig()
 }

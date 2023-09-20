@@ -41,7 +41,8 @@ func (ms MoocService) Login(ctx *gin.Context) {
 	})
 	<-ch
 	session.Page.Context().StorageState(global.GetString("mooc.storage"))
-	global.ReturnMessage(ctx, true, "登录成功")
+	log.Println("[Mooc] Login successful")
+	global.Set("mooc.login", "true")
 	ms.Close(session)
 }
 
@@ -49,6 +50,7 @@ func (ms MoocService) Login(ctx *gin.Context) {
 func (ms MoocService) checkLogin(ctx *gin.Context, host string, page playwright.Page) bool {
 	header, _ := page.Locator(".layout-header-right").TextContent()
 	if strings.Contains(header, "登录") {
+		global.Set("mooc.login", "false")
 		if _, err := page.Goto(host + "/oauth/login/weixin"); err != nil {
 			log.Fatalf("无法跳转地址: %v", err)
 		}
@@ -61,6 +63,7 @@ func (ms MoocService) checkLogin(ctx *gin.Context, host string, page playwright.
 			return true
 		}
 	} else {
+		global.Set("mooc.login", "true")
 		global.ReturnMessage(ctx, false, "已登录,请勿重复操作")
 		return false
 	}
