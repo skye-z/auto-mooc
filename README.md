@@ -1,5 +1,8 @@
 # Auto Mooc - 自动化慕课工具
 
+[![](https://img.shields.io/badge/Go-1.20+-%2300ADD8?style=flat&logo=go)](go.work)
+[![](https://img.shields.io/badge/License-GPL%20v3.0-orange)](LICENSE)
+
 请注意: 本项目仅供交流学习自动化测试技术, 滥用造成的后果请自行承担!
 
 ## 前言
@@ -84,8 +87,10 @@ storage=/Users/root/Workspace/auto-mooc/storage.db
 
 ## 编译
 
-这里提供两种编译方法.
+这里提供三种编译方法.
 
 第一种是编译本机环境的二进制文件: `go build -ldflags '-s -w'`
 
 第二种则是交叉编译: `CGO_ENABLED=0 GOOS=平台 GOARCH=架构 go build -ldflags '-s -w'`
+
+第三种是脚本编译: `bash ./build.sh`
