@@ -27,6 +27,8 @@ func (ms MoocService) Login(ctx *gin.Context) {
 	// 检查登录
 	next := ms.checkLogin(ctx, host, session.Page)
 	if !next {
+		session.Page.Context().StorageState(global.GetString("mooc.storage"))
+		ms.Close(session)
 		return
 	}
 	ch := make(chan bool)
@@ -39,12 +41,11 @@ func (ms MoocService) Login(ctx *gin.Context) {
 	})
 	<-ch
 	session.Page.Context().StorageState(global.GetString("mooc.storage"))
-	time.Sleep(1 * time.Second)
-	session.Page.Close()
-	session.Context.Close()
-	session.Browser.Close()
+	global.ReturnMessage(ctx, true, "登录成功")
+	ms.Close(session)
 }
 
+// 检查登录
 func (ms MoocService) checkLogin(ctx *gin.Context, host string, page playwright.Page) bool {
 	header, _ := page.Locator(".layout-header-right").TextContent()
 	if strings.Contains(header, "登录") {
@@ -78,4 +79,12 @@ func (ms MoocService) StartClass(ctx *gin.Context) {
 // 结束上课
 func (ms MoocService) StopClass(ctx *gin.Context) {
 
+}
+
+// 关闭会话
+func (ms MoocService) Close(session *webkit.Session) {
+	time.Sleep(1 * time.Second)
+	session.Page.Close()
+	session.Context.Close()
+	session.Browser.Close()
 }

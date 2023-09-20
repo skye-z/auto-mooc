@@ -13,7 +13,7 @@ type Session struct {
 }
 
 func OpenPage(engine *playwright.Playwright, url string) (*Session, error) {
-	storagePath := global.GetString("basic.workspace") + "/storage.db"
+	storagePath := global.GetString("mooc.storage")
 	browser, err := engine.WebKit.Launch(playwright.BrowserTypeLaunchOptions{
 		Headless: playwright.Bool(false),
 	})

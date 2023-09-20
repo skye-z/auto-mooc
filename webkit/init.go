@@ -34,6 +34,8 @@ func InitWebKit() *WebKit {
 			log.Fatalf("[WebKit] Error installing: %v", err)
 			return nil
 		}
+		// 创建持久化文件
+		CreateStorage()
 		global.Set("basic.install", true)
 	}
 	// 启动WebKit
@@ -45,8 +47,6 @@ func InitWebKit() *WebKit {
 	}
 	// 输出启动脚步位置
 	log.Printf("[WebKit] Launches from: %s", pw.WebKit.ExecutablePath())
-	// 创建持久化文件
-	CreateStorage()
 	return &WebKit{
 		Engine:  pw,
 		Running: false,
