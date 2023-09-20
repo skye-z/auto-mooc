@@ -16,7 +16,7 @@ func OpenPage(engine *playwright.Playwright, url string) (*Session, error) {
 	storagePath := global.GetString("mooc.storage")
 	// 启动浏览器
 	browser, err := engine.WebKit.Launch(playwright.BrowserTypeLaunchOptions{
-		Headless: playwright.Bool(false),
+		Headless: playwright.Bool(true),
 	})
 	if err != nil {
 		return nil, err

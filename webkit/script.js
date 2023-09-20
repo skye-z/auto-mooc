@@ -9,7 +9,10 @@
             if (video) {
                 video.playbackRate = 2;
                 video.muted = true;
-                video.play();
+                if (!video.ended)
+                    video.play();
+                else
+                    video.pause();
                 if (video.ended)
                     done = true;
                 let quizLayer = document.querySelector('#quizLayer');
