@@ -40,7 +40,9 @@ func RunHttp(obj *webkit.WebKit) {
 	route.GET("/status", statusService.GetStatus)
 	// 接口 登录账户
 	route.GET("/login", moocService.Login)
-	// 接口 选课
+	// 接口 课程列表
+	route.GET("/class/list", moocService.ClassList)
+	// 接口 提交选课
 	route.GET("/class/select", moocService.ClassSelect)
 	// 接口 开始上课
 	route.GET("/class/start", moocService.StartClass)

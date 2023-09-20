@@ -9,6 +9,7 @@ import (
 type commonResponse struct {
 	State   bool   `json:"bool"`
 	Message string `json:"message"`
+	Data    any    `json:"data"`
 	Time    int64  `json:"time"`
 }
 
@@ -21,7 +22,12 @@ func ReturnMessage(ctx *gin.Context, state bool, message string) {
 	ctx.Abort()
 }
 
-func ReturnSuccess(ctx *gin.Context, obj any) {
-	ctx.JSON(200, obj)
+func ReturnData(ctx *gin.Context, state bool, message string, obj any) {
+	ctx.JSON(200, commonResponse{
+		State:   state,
+		Message: message,
+		Data:    obj,
+		Time:    time.Now().Unix(),
+	})
 	ctx.Abort()
 }

@@ -57,12 +57,14 @@ port=80
 workspace=/Users/root/Workspace/auto-mooc
 
 [mooc]
+; 选课编号
+class=123456
+; 是否已登录, 由应用自行判断后填充
+login=false
 ; 慕课服务地址, 请已登录后跳转的域名地址为准
 path=http://mooc.com
 ; 持久化存储位置, 提供Cookie和本地存储的持久化
 storage=/Users/root/Workspace/auto-mooc/storage.db
-; 是否已登录, 由应用自行判断后填充
-login=false
 ```
 
 ## 编译

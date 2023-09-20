@@ -4,6 +4,7 @@ import (
 	"auto-mooc/global"
 	"auto-mooc/webkit"
 	"log"
+	"strconv"
 	"strings"
 	"time"
 
@@ -13,6 +14,11 @@ import (
 
 type MoocService struct {
 	WebKitObj *webkit.WebKit
+}
+
+type Class struct {
+	Id   int64
+	Name string
 }
 
 // 登录账户
@@ -48,8 +54,7 @@ func (ms MoocService) Login(ctx *gin.Context) {
 
 // 检查登录
 func (ms MoocService) checkLogin(ctx *gin.Context, host string, page playwright.Page) bool {
-	header, _ := page.Locator(".layout-header-right").TextContent()
-	if strings.Contains(header, "登录") {
+	if ms.getLoginStatus(page) {
 		global.Set("mooc.login", "false")
 		if _, err := page.Goto(host + "/oauth/login/weixin"); err != nil {
 			log.Fatalf("无法跳转地址: %v", err)
@@ -69,19 +74,83 @@ func (ms MoocService) checkLogin(ctx *gin.Context, host string, page playwright.
 	}
 }
 
+// 获取课程列表
+func (ms MoocService) ClassList(ctx *gin.Context) {
+	host := global.GetString("mooc.path")
+	// 打开页面
+	session, err := webkit.OpenPage(ms.WebKitObj.Engine, host+"/home")
+	if err != nil {
+		log.Fatalf("无法打开页面: %v", err)
+	}
+	// 检查登录
+	if !ms.getLoginStatus(session.Page) {
+		global.ReturnMessage(ctx, false, "请先登录")
+		return
+	}
+	// 获取课程列表
+	classList, err := session.Page.Locator(".course-item").All()
+	if err != nil || len(classList) == 0 {
+		global.ReturnMessage(ctx, false, "没有可选课程")
+		return
+	}
+	var list []Class
+	for i := 0; i < len(classList); i++ {
+		item := classList[i].Locator(".course-name")
+		href, _ := item.GetAttribute("href")
+		classId, _ := strconv.ParseInt(href[strings.Index(href, "cycleid=")+8:], 10, 64)
+		className, _ := item.TextContent()
+		classInfo := &Class{
+			Id:   classId,
+			Name: className,
+		}
+		list = append(list, *classInfo)
+	}
+	global.ReturnData(ctx, true, "请选择课程", list)
+}
+
 // 选课
 func (ms MoocService) ClassSelect(ctx *gin.Context) {
-
+	id := ctx.Query("id")
+	if len(id) == 0 {
+		global.ReturnMessage(ctx, false, "请传入课程编号")
+	} else {
+		clssId, _ := strconv.ParseInt(id, 10, 64)
+		global.Set("mooc.class", clssId)
+		global.ReturnMessage(ctx, true, "选课已登记")
+	}
 }
 
 // 开始上课
 func (ms MoocService) StartClass(ctx *gin.Context) {
-
+	// 检查登录
+	if !global.GetBool("mooc.login") {
+		global.ReturnMessage(ctx, false, "请先登录")
+		return
+	}
+	// 检查选课
+	classId := global.GetString("mooc.class")
+	if len(classId) == 0 {
+		global.ReturnMessage(ctx, false, "请先完成选课")
+		return
+	}
+	host := global.GetString("mooc.path")
+	// 打开页面
+	_, err := webkit.OpenPage(ms.WebKitObj.Engine, host+"/home/learn/index#/"+classId+"/go")
+	if err != nil {
+		log.Fatalf("无法打开页面: %v", err)
+	}
+	ms.WebKitObj.Running = true
 }
 
 // 结束上课
 func (ms MoocService) StopClass(ctx *gin.Context) {
+	ms.WebKitObj.Running = false
+}
 
+// 获取登录状态
+func (ms MoocService) getLoginStatus(page playwright.Page) bool {
+	header, _ := page.Locator(".layout-header-right").TextContent()
+	return !strings.Contains(header, "登录")
 }
 
 // 关闭会话
