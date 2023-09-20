@@ -54,13 +54,13 @@ install=true
 ; 应用监听端口, 将在此端口上提供Http服务
 port=80
 ; 应用工作空间, 应用所有资源所在的目录
-workspace=/Users/zhaoguiyang/Desktop/Workspace/Golang/auto-mooc
+workspace=/Users/root/Workspace/auto-mooc
 
 [mooc]
 ; 慕课服务地址, 请已登录后跳转的域名地址为准
-path=http://cce.org.uooconline.com
+path=http://mooc.com
 ; 持久化存储位置, 提供Cookie和本地存储的持久化
-storage=/Users/zhaoguiyang/Desktop/Workspace/Golang/auto-mooc/storage.db
+storage=/Users/root/Workspace/auto-mooc/storage.db
 ```
 
 ## 编译
