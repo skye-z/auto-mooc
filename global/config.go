@@ -45,6 +45,8 @@ func createDefault() {
 	viper.SetDefault("basic.workspace", dir)
 	// 服务端口
 	viper.SetDefault("basic.port", "80")
+	// 用户代理信息
+	viper.SetDefault("basic.user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15")
 	// 调试模式
 	viper.SetDefault("basic.debug", "false")
 	// 慕课服务地址

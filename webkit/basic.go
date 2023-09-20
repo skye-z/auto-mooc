@@ -24,6 +24,7 @@ func OpenPage(engine *playwright.Playwright, url string) (*Session, error) {
 	// 创建上下文
 	context, err := browser.NewContext(playwright.BrowserNewContextOptions{
 		StorageStatePath: playwright.String(storagePath),
+		UserAgent:        playwright.String(global.GetString("basic.user-agent")),
 	})
 	if err != nil {
 		return nil, err
