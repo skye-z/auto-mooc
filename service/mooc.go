@@ -1,12 +1,13 @@
 package service
 
 import (
-	"auto-mooc/global"
-	"auto-mooc/webkit"
 	"log"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/skye-z/auto-mooc/global"
+	"github.com/skye-z/auto-mooc/webkit"
 
 	"github.com/gin-gonic/gin"
 	"github.com/playwright-community/playwright-go"

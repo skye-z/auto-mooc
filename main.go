@@ -1,14 +1,15 @@
 package main
 
 import (
-	"auto-mooc/global"
-	"auto-mooc/service"
-	"auto-mooc/webkit"
 	"embed"
 	"io"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/skye-z/auto-mooc/global"
+	"github.com/skye-z/auto-mooc/service"
+	"github.com/skye-z/auto-mooc/webkit"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,8 +22,10 @@ func main() {
 	global.InitConfig()
 	// 初始化WebKit
 	WebKit := webkit.InitWebKit()
-	// 启动Http服务
-	RunHttp(WebKit)
+	if len(os.Args) == 1 {
+		// 启动Http服务
+		RunHttp(WebKit)
+	}
 }
 
 // 启动Http服务

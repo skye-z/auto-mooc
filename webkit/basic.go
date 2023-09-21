@@ -1,7 +1,7 @@
 package webkit
 
 import (
-	"auto-mooc/global"
+	"github.com/skye-z/auto-mooc/global"
 
 	"github.com/playwright-community/playwright-go"
 )

@@ -1,11 +1,12 @@
 package webkit
 
 import (
-	"auto-mooc/global"
 	_ "embed"
 	"log"
 	"sync"
 	"time"
+
+	"github.com/skye-z/auto-mooc/global"
 )
 
 //go:embed script.js

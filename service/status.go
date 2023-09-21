@@ -1,8 +1,8 @@
 package service
 
 import (
-	"auto-mooc/global"
-	"auto-mooc/webkit"
+	"github.com/skye-z/auto-mooc/global"
+	"github.com/skye-z/auto-mooc/webkit"
 
 	"github.com/gin-gonic/gin"
 )

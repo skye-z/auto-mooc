@@ -1,4 +1,4 @@
-module auto-mooc
+module github.com/skye-z/auto-mooc
 
 go 1.21.0
 
