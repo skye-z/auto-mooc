@@ -41,6 +41,11 @@
 
 可直接下载二进制文件, 或拉取项目代码, 然后在项目目录下执行`go mod download`
 
+或者使用 Docker
+```shell
+docker run -d -p 80:80 -n auto-mooc skyezhang/auto-mooc:1.0.1
+```
+
 ## 使用
 
 双击下载的二进制文件即可运行, 如果是拉取项目代码的, 请在项目目录下执行`go run main.go`

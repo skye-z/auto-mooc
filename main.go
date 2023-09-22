@@ -25,6 +25,8 @@ func main() {
 	if len(os.Args) == 1 {
 		// 启动Http服务
 		RunHttp(WebKit)
+	} else {
+		os.Exit(0)
 	}
 }
 
