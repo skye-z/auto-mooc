@@ -37,37 +37,48 @@
 3. Viper: Go语言配置文件读写库
 2. Gin: Go语言主流Http服务库
 
-## 安装
+## 使用
 
-可直接下载二进制文件, 或拉取项目代码, 然后在项目目录下执行`go mod download`
+### 在 Docker 使用
 
-或者使用 Docker
 ```shell
 docker run -d -p 80:80 -n auto-mooc skyezhang/auto-mooc:1.0.1
 ```
 
-## 使用
+最后在浏览器输入 Docker IP (默认80端口), 将自动导航到控制页面
 
-双击下载的二进制文件即可运行, 如果是拉取项目代码的, 请在项目目录下执行`go run main.go`
+### 在本机使用
 
-### 通过页面访问
+#### 下载二进制文件
 
-请在浏览器打开`IP + 端口`, 将自动导航到控制页面
+点击右侧[Releases](https://github.com/skye-z/auto-mooc/releases)下载二进制文件, Windows需在CMD中启动, 其他系统可双击启动.
 
-### 通过接口访问
+最后在浏览器输入localhost(默认80端口), 将自动导航到控制页面
 
-1. 首先访问`/login`登录账户
-2. 登录后访问`/class/list`获取课程列表
-3. 然后访问`/class/select?id=课程id`进行选课
-4. 选完后访问`/class/start`开始上课
+#### 从源代码启动
 
-其他接口
+```shell
+# 拉取项目
+git clone https://github.com/skye-z/auto-mooc.git auto-mooc
+# 进入目录
+cd auto-mooc
+# 下载依赖
+go mod download
+# 启动项目
+go run main.go
+```
 
-* 查询状态: `/status` 查询登录和上课服务状态
-* 任务截图: `/screenshot` 查看当前任务执行截图
-* 停止上课: `/class/stop` 这个接口会发出一个停止信号, 协程收到信号后最晚10秒内结束
+## 服务接口
 
-### 配置文件
+1. `/login` 登录账户
+2. `/class/list` 获取课程列表
+3. `/class/select?id=课程id` 选课
+4. `/class/start` 开始上课
+5. `/class/stop` 停止上课
+6. `/status` 查询状态
+7. `/screenshot` 任务截图
+
+## 应用配置
 
 在应用程序首次运行后, 应用会在所在目录下生成`config.ini`配置文件, 如果不了解配置含义请勿随意修改!!!!
 
@@ -97,7 +108,7 @@ path=http://mooc.com
 storage=/Users/root/Workspace/auto-mooc/storage.db
 ```
 
-## 编译
+## 自行编译
 
 这里提供三种编译方法.
 
