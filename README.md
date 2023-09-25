@@ -106,6 +106,12 @@ login=false
 path=http://mooc.com
 ; 持久化存储位置, 提供Cookie和本地存储的持久化
 storage=/Users/root/Workspace/auto-mooc/storage.db
+
+[push]
+; 启用推送
+enable=false
+; 推送地址(下面的是示例,只要符合标准的地址都可以)
+url=`https://api2.pushdeer.com/message/push?pushkey={替换你自己的令牌}&text=`
 ```
 
 ## 自行编译
