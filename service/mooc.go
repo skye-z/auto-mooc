@@ -7,14 +7,14 @@ import (
 	"time"
 
 	"github.com/skye-z/auto-mooc/global"
-	"github.com/skye-z/auto-mooc/webkit"
+	"github.com/skye-z/auto-mooc/work"
 
 	"github.com/gin-gonic/gin"
 	"github.com/playwright-community/playwright-go"
 )
 
 type MoocService struct {
-	WebKitObj *webkit.WebKit
+	PKG *global.RunPKG
 }
 
 type Class struct {
@@ -26,7 +26,7 @@ type Class struct {
 func (ms MoocService) Login(ctx *gin.Context) {
 	host := global.GetString("mooc.path")
 	// 打开页面
-	session, err := webkit.OpenPage(ms.WebKitObj.Engine, host)
+	session, err := work.OpenPage(ms.PKG.Engine, host)
 	if err != nil {
 		log.Fatalf("无法打开页面: %v", err)
 	}
@@ -80,7 +80,7 @@ func (ms MoocService) checkLogin(ctx *gin.Context, host string, page playwright.
 func (ms MoocService) ClassList(ctx *gin.Context) {
 	host := global.GetString("mooc.path")
 	// 打开页面
-	session, err := webkit.OpenPage(ms.WebKitObj.Engine, host+"/home")
+	session, err := work.OpenPage(ms.PKG.Engine, host+"/home")
 	if err != nil {
 		log.Fatalf("无法打开页面: %v", err)
 	}
@@ -108,6 +108,7 @@ func (ms MoocService) ClassList(ctx *gin.Context) {
 		list = append(list, *classInfo)
 	}
 	global.ReturnData(ctx, true, "请选择课程", list)
+	session.Page.Close()
 }
 
 // 选课
@@ -137,11 +138,11 @@ func (ms MoocService) StartClass(ctx *gin.Context) {
 	}
 	host := global.GetString("mooc.path")
 	// 打开页面
-	session, err := webkit.OpenPage(ms.WebKitObj.Engine, host+"/home/learn/index#/"+classId+"/go")
+	session, err := work.OpenPage(ms.PKG.Engine, host+"/home/learn/index#/"+classId+"/go")
 	if err != nil {
 		log.Fatalf("无法打开页面: %v", err)
 	}
-	state := webkit.CreateWork(session, ms.WebKitObj)
+	state := work.CreateWork(session, ms.PKG)
 	if !state {
 		global.ReturnMessage(ctx, false, "正在上课中")
 		return
@@ -152,7 +153,7 @@ func (ms MoocService) StartClass(ctx *gin.Context) {
 
 // 结束上课
 func (ms MoocService) StopClass(ctx *gin.Context) {
-	state := webkit.CloseWork(ms.WebKitObj)
+	state := work.CloseWork(ms.PKG)
 	if !state {
 		global.ReturnMessage(ctx, false, "未在上课中")
 		return
@@ -168,7 +169,7 @@ func (ms MoocService) getLoginStatus(page playwright.Page) bool {
 }
 
 // 关闭会话
-func (ms MoocService) Close(session *webkit.Session) {
+func (ms MoocService) Close(session *work.Session) {
 	time.Sleep(1 * time.Second)
 	session.Page.Close()
 	session.Context.Close()

@@ -2,13 +2,13 @@ package service
 
 import (
 	"github.com/skye-z/auto-mooc/global"
-	"github.com/skye-z/auto-mooc/webkit"
+	"github.com/skye-z/auto-mooc/work"
 
 	"github.com/gin-gonic/gin"
 )
 
 type StatusService struct {
-	WebKitObj *webkit.WebKit
+	PKG *global.RunPKG
 }
 
 func (ss StatusService) GetStatus(ctx *gin.Context) {
@@ -21,7 +21,7 @@ func (ss StatusService) GetStatus(ctx *gin.Context) {
 	if len(classId) != 0 {
 		loginTips += ", 已选课(" + classId + ")"
 	}
-	if ss.WebKitObj.Running {
+	if ss.PKG.Running {
 		global.ReturnMessage(ctx, true, loginTips+", 任务执行中")
 	} else {
 		global.ReturnMessage(ctx, true, loginTips+", 任务未启动")
@@ -29,11 +29,11 @@ func (ss StatusService) GetStatus(ctx *gin.Context) {
 }
 
 func (ss StatusService) GetScreenshot(ctx *gin.Context) {
-	if !ss.WebKitObj.Running {
+	if !ss.PKG.Running {
 		global.ReturnMessage(ctx, false, "服务尚未启动")
 		return
 	}
-	data, err := webkit.WorkScreenshot()
+	data, err := work.WorkScreenshot()
 	if err != nil {
 		global.ReturnMessage(ctx, false, "获取任务截图失败")
 	}

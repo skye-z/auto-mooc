@@ -49,6 +49,8 @@ func createDefault() {
 	viper.SetDefault("basic.user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15")
 	// 调试模式
 	viper.SetDefault("basic.debug", "false")
+	// 调试模式
+	viper.SetDefault("basic.engine", "webkit")
 	// 慕课服务地址
 	viper.SetDefault("mooc.path", "http://cce.org.uooconline.com")
 	// 持久化存储位置

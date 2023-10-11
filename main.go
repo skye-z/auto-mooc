@@ -9,7 +9,7 @@ import (
 
 	"github.com/skye-z/auto-mooc/global"
 	"github.com/skye-z/auto-mooc/service"
-	"github.com/skye-z/auto-mooc/webkit"
+	"github.com/skye-z/auto-mooc/work"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,17 +21,17 @@ func main() {
 	// 初始化配置
 	global.InitConfig()
 	// 初始化WebKit
-	WebKit := webkit.InitWebKit()
+	work := work.InitWork()
 	if len(os.Args) == 1 {
 		// 启动Http服务
-		RunHttp(WebKit)
+		RunHttp(work)
 	} else {
 		os.Exit(0)
 	}
 }
 
 // 启动Http服务
-func RunHttp(obj *webkit.WebKit) {
+func RunHttp(obj *global.RunPKG) {
 	// 关闭调试
 	gin.SetMode(gin.ReleaseMode)
 	// 禁用路由日志
@@ -54,11 +54,11 @@ func RunHttp(obj *webkit.WebKit) {
 	})
 	// 创建状态服务
 	statusService := &service.StatusService{
-		WebKitObj: obj,
+		PKG: obj,
 	}
 	// 创建慕课服务
 	moocService := &service.MoocService{
-		WebKitObj: obj,
+		PKG: obj,
 	}
 	// 接口 查询状态
 	route.GET("/status", statusService.GetStatus)

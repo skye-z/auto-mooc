@@ -1,4 +1,4 @@
-package webkit
+package work
 
 import (
 	_ "embed"
@@ -27,7 +27,7 @@ var (
 )
 
 // 创建任务
-func CreateWork(session *Session, status *WebKit) bool {
+func CreateWork(session *Session, status *global.RunPKG) bool {
 	// 加锁防并发
 	workLock.Lock()
 	defer workLock.Unlock()
@@ -72,7 +72,7 @@ func CreateWork(session *Session, status *WebKit) bool {
 }
 
 // 关闭任务
-func CloseWork(status *WebKit) bool {
+func CloseWork(status *global.RunPKG) bool {
 	// 加锁防并发
 	workLock.Lock()
 	defer workLock.Unlock()
@@ -95,7 +95,7 @@ func CloseWork(status *WebKit) bool {
 }
 
 // 任务内容
-func WorkContent(session *Session, status *WebKit) {
+func WorkContent(session *Session, status *global.RunPKG) {
 	page := session.Page
 	// 查找是否存在视频播放器
 	visible, _ := page.Locator("#player").IsVisible()

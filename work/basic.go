@@ -1,4 +1,4 @@
-package webkit
+package work
 
 import (
 	"github.com/skye-z/auto-mooc/global"
@@ -14,10 +14,20 @@ type Session struct {
 
 func OpenPage(engine *playwright.Playwright, url string) (*Session, error) {
 	storagePath := global.GetString("mooc.storage")
+	var (
+		browser playwright.Browser
+		err     error
+	)
 	// 启动浏览器
-	browser, err := engine.WebKit.Launch(playwright.BrowserTypeLaunchOptions{
-		Headless: playwright.Bool(!global.GetBool("basic.debug")),
-	})
+	if global.GetString("basic.engine") == "webkit" {
+		browser, err = engine.WebKit.Launch(playwright.BrowserTypeLaunchOptions{
+			Headless: playwright.Bool(!global.GetBool("basic.debug")),
+		})
+	} else {
+		browser, err = engine.Chromium.Launch(playwright.BrowserTypeLaunchOptions{
+			Headless: playwright.Bool(!global.GetBool("basic.debug")),
+		})
+	}
 	if err != nil {
 		return nil, err
 	}
